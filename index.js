@@ -15,17 +15,9 @@ import { storieRouter } from './router/storieRouter.js'
 
 const app = express()
 
-const whiteList = [process.env.ORIGIN1]
-
 app.use(express.static(path.resolve(__dirname(import.meta.url), './public')))
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whiteList.includes(origin)) {
-      return callback(null, origin)
-    }
-    // eslint-disable-next-line n/no-callback-literal
-    return callback('Error de CORS origin: ' + origin + 'No autorizado')
-  },
+  origin: process.env.ORIGIN1,
   credentials: true
 }
 app.use(cors(corsOptions))
