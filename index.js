@@ -9,7 +9,7 @@ import { commentRouter } from './router/commentRouter.js'
 import { userRouter } from './router/userRouter.js'
 import { likeRouter } from './router/likeRouter.js'
 import { pictureRouter } from './router/pictureRouter.js'
-import { confirmRouter } from './router/ConfirmRouter.js'
+import { confirmRouter } from './router/confirmRouter.js'
 import { __dirname } from './utils/__dirname.js'
 import { storieRouter } from './router/storieRouter.js'
 
