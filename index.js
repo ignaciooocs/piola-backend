@@ -16,10 +16,19 @@ import { storieRouter } from './router/storieRouter.js'
 const app = express()
 
 app.use(express.static(path.resolve(__dirname(import.meta.url), './public')))
+
+const whiteList = [process.env.ORIGIN1, process.env.ORIGIN2]
 const corsOptions = {
-  origin: process.env.ORIGIN1,
+  origin: function (origin, callback) {
+    console.log(`origin: ${origin}`)
+    if (!origin || whiteList.includes(origin)) {
+      return callback(null, origin)
+    }
+    return callback(new Error('Error de CORS origin: ' + origin + ' No autorizado'))
+  },
   credentials: true
 }
+
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
@@ -34,4 +43,4 @@ app.use('/api/v1/confirm/account', confirmRouter)
 
 const PORT = process.env.PORT
 
-app.listen(PORT, () => console.log(`running in port ${PORT}`))
+app.listen(PORT, () => console.log('server running'))

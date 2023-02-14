@@ -49,7 +49,6 @@ export const register = async (req, res) => {
 // Login User
 //
 export const login = async (req, res) => {
-  console.log('entro aqui')
   const { username, password } = req.body
 
   try {

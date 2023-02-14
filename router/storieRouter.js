@@ -10,7 +10,6 @@ storieRouter.post('/', requireToken, async (req, res) => {
 
   try {
     const user = await User.findById(userId)
-    console.log(user)
 
     const newStorie = new Storie({
       by,
