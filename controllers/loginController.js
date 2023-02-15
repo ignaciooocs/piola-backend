@@ -91,6 +91,6 @@ export const refreshToken = async (req, res) => {
 }
 
 export const logout = (req, res) => {
-  res.clearCookie('refreshToken')
+  res.cookie('refreshToken', '', { expires: new Date(0) })
   res.json({ message: 'sesión cerrada' })
 }
