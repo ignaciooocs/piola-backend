@@ -97,7 +97,8 @@ export const logout = (req, res) => {
   res.cookie('refreshToken', 'refreshToken', {
     httpOnly: true,
     secure: !(process.env.MODO === 'developer'),
-    expires: new Date(Date.now() + expiresIn * 1000)
+    expires: new Date(Date.now() + expiresIn * 1000),
+    sameSite: 'none'
   })
   res.json({ message: 'sesión cerrada' })
 }
