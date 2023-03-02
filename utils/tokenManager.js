@@ -27,6 +27,17 @@ export const generateRefreshToken = (id, res) => {
   }
 }
 
+export const generateTokenMobile = (id) => {
+  const expiresIn = 60 * 60 * 24 * 30
+
+  try {
+    const token = Jwt.sign({ id }, process.env.SECRET, { expiresIn })
+    return { token, expiresIn }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const tokenVerificatiosErrors = {
   'invalid signature': 'La firma del JWT no es valida',
   'jwt expired': 'JWT exoirado',

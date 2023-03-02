@@ -1,6 +1,6 @@
 import { User } from '../models/User.js'
 import { nanoid } from 'nanoid'
-import { generateRefreshToken, generateToken, tokenVerificatiosErrors } from '../utils/tokenManager.js'
+import { generateRefreshToken, generateToken, generateTokenMobile, tokenVerificatiosErrors } from '../utils/tokenManager.js'
 import { transporter } from '../utils/mailer.js'
 import ejs from 'ejs'
 import path from 'path'
@@ -61,6 +61,31 @@ export const login = async (req, res) => {
 
     const { token, expiresIn } = generateToken(user._id)
     generateRefreshToken(user._id, res)
+
+    res.send({
+      username: user.username,
+      id: user._id,
+      token,
+      expiresIn
+    })
+  } catch (error) {
+    return res.status(403).json({ error: error.message })
+  }
+}
+
+// Login user in Mobile
+export const loginMobile = async (req, res) => {
+  const { username, password } = req.body
+
+  try {
+    const user = await User.findOne({ username })
+    if (!user) throw new Error('El usuario o la contraseña son incorrectos')
+    if (!user.confirmedAccount) throw new Error('Confirma tu cuenta para iniciar')
+
+    const responsePassword = await user.comparePassword(password, user.password)
+    if (!responsePassword) throw new Error('El usuario o la contraseña son incorrectos')
+
+    const { token, expiresIn } = generateTokenMobile(user._id)
 
     res.send({
       username: user.username,

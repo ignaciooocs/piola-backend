@@ -1,6 +1,6 @@
 import express from 'express'
 import { body } from 'express-validator'
-import { register, login, refreshToken, logout } from '../controllers/loginController.js'
+import { register, login, refreshToken, logout, loginMobile } from '../controllers/loginController.js'
 import { validationResults } from '../middleware/validationResults.js'
 import { requireRefreshToken } from '../middleware/requireRefreshToken.js'
 
@@ -22,6 +22,8 @@ loginRouter.post('/register', [
 ], validationResults, register)
 
 loginRouter.post('/login', login)
+
+loginRouter.post('/login/mobile', loginMobile)
 
 loginRouter.get('/refresh', requireRefreshToken, refreshToken)
 
