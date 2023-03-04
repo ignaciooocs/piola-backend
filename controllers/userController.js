@@ -93,3 +93,29 @@ export const deleteUser = async (req, res) => {
     res.json({ error: 'No se elimino el usuario' })
   }
 }
+
+export const getLikedUsers = async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const user = await User.findById(id).populate(userPopulate)
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado.' })
+    }
+
+    const likedToUserIds = user.liked.map((like) => like.toUser)
+
+    // Esperar a que todas las promesas se resuelvan usando Promise.all()
+    const likedUsers = await Promise.all(
+      likedToUserIds.map(async (id) => {
+        const liked = await User.findById(id).populate(userPopulate)
+        return liked
+      })
+    )
+
+    res.json(likedUsers)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Hubo un error al buscar los usuarios.' })
+  }
+}
