@@ -137,16 +137,22 @@ export const getNotifications = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' })
     }
 
-    const usersIds = user.notifications.map(notification => notification.toUser)
+    const notifications = user.notifications.map(notification => ({
+      toUser: notification.fromUser,
+      createdAt: notification.createdAt
+    }))
 
-    const notifications = await Promise.all(
-      usersIds.map(async (id) => {
-        const notification = await User.findById(id)
-        return notification
+    const users = await Promise.all(
+      notifications.map(async ({ toUser, createdAt }) => {
+        const user = await User.findById(toUser)
+        if (user) {
+          return { ...user.toJSON(), notificationCreatedAt: createdAt }
+        }
+        return null
       })
     )
 
-    res.json(notifications)
+    res.json(users.filter(user => user !== null))
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Hubo un error al buscar los usuarios.' })
