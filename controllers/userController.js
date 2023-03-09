@@ -2,6 +2,7 @@ import bcript from 'bcrypt'
 import { User } from '../models/User.js'
 import { userPopulate } from '../utils/constanst.js'
 
+// Metodo para crear el buscador de usuario
 export const searchUsers = async (req, res) => {
   const { username } = req.params
   const searchRegex = new RegExp(username, 'i')
@@ -14,6 +15,7 @@ export const searchUsers = async (req, res) => {
   }
 }
 
+// Metodo para obtener un usuario por su Id
 export const getUser = async (req, res) => {
   const { id } = req.params
 
@@ -27,6 +29,7 @@ export const getUser = async (req, res) => {
   res.json(user)
 }
 
+// Metodo para obtener un usuario por su nombre de usuario
 export const getUserByUsername = async (req, res) => {
   const { username } = req.params
 
@@ -40,11 +43,13 @@ export const getUserByUsername = async (req, res) => {
   res.json(user)
 }
 
+// Metodo para obtener todos los usuarios
 export const getUsers = async (req, res) => {
   const users = await User.find({})
   res.json(users)
 }
 
+// Metodo para actualizar al usuario
 export const updateUser = async (req, res) => {
   const { id } = req.params
   const { username, password, prePassword, biography } = req.body
@@ -84,6 +89,7 @@ export const updateUser = async (req, res) => {
   }
 }
 
+// Metodo para eliminar al usuario
 export const deleteUser = async (req, res) => {
   const { userId } = req
   try {
@@ -94,6 +100,7 @@ export const deleteUser = async (req, res) => {
   }
 }
 
+// Metodo para obtener todos los usuario a los cuales le a dado like un usuario en especifico
 export const getLikedUsers = async (req, res) => {
   const { id } = req.params
 
@@ -113,7 +120,33 @@ export const getLikedUsers = async (req, res) => {
       })
     )
 
+    likedUsers.sort(() => Math.random() - 0.5)
     res.json(likedUsers)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Hubo un error al buscar los usuarios.' })
+  }
+}
+
+// Metodo para obtener las notificaciones de un usuario por su id
+export const getNotifications = async (req, res) => {
+  const { id } = req.params
+  try {
+    const user = await User.findById(id).populate(userPopulate)
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+    }
+
+    const usersIds = user.notifications.map(notification => notification.toUser)
+
+    const notifications = await Promise.all(
+      usersIds.map(async (id) => {
+        const notification = await User.findById(id)
+        return notification
+      })
+    )
+
+    res.json(notifications)
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Hubo un error al buscar los usuarios.' })
