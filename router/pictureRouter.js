@@ -18,8 +18,9 @@ const diskStorage = multer.diskStorage({
     cb(null, filePath)
   },
   filename: (req, file, cb) => {
+    const { userId } = req
     const fileExtension = path.extname(file.originalname)
-    cb(null, `${Date.now()}${fileExtension}`)
+    cb(null, `${userId}${fileExtension}`)
   }
 })
 

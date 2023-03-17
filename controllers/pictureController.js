@@ -30,7 +30,7 @@ export const deletePicture = async (req, res) => {
   const { userId } = req
   const { imageName } = req.params
 
-  if (imageName === 'not-picture2.png') return res.json({ message: 'No tienes foto' })
+  // if (imageName === 'not-picture2.png') return res.json({ message: 'No tienes foto' })
 
   const filePath = path.resolve(__dirname, `../public/profile-picture/${imageName}`)
 
@@ -40,7 +40,7 @@ export const deletePicture = async (req, res) => {
     }
     const user = await User.findById(userId)
 
-    user.picture = 'not-picture2.png'
+    user.picture = null
     user.save()
 
     res.json({ message: 'Imagen eliminada correctamente' })

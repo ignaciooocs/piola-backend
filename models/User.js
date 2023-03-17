@@ -41,7 +41,7 @@ const UserSchema = new Schema({
   }],
   picture: {
     type: String,
-    default: 'not-picture2.png'
+    default: null
   },
   notifications: [{
     type: Schema.Types.ObjectId,
