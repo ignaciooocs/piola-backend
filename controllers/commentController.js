@@ -8,7 +8,6 @@ export const getCommentById = async (req, res) => {
     if (!comment) {
       return res.json({ error: 'no se encontro el comentario' })
     }
-    console.log(comment)
     res.json(comment)
   } catch (error) {
     console.log(error.message)

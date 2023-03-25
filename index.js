@@ -3,24 +3,19 @@ import './database/connect.js'
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import path from 'path'
 import { loginRouter } from './router/loginRoute.js'
 import { commentRouter } from './router/commentRouter.js'
 import { userRouter } from './router/userRouter.js'
 import { likeRouter } from './router/likeRouter.js'
 import { pictureRouter } from './router/pictureRouter.js'
 import { confirmRouter } from './router/confirmRouter.js'
-import { __dirname } from './utils/__dirname.js'
 import { storieRouter } from './router/storieRouter.js'
 
 const app = express()
 
-app.use(express.static(path.resolve(__dirname(import.meta.url), './public')))
-
 const whiteList = [process.env.ORIGIN1, process.env.ORIGIN2]
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log(`origin: ${origin}`)
     if (!origin || whiteList.includes(origin)) {
       return callback(null, origin)
     }
