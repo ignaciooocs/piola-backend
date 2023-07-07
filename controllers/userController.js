@@ -51,19 +51,19 @@ export const getUsers = async (req, res) => {
 
 // Metodo para actualizar al usuario
 export const updateUser = async (req, res) => {
-  const { id } = req.params
+  const { userId } = req
   const { username, password, prePassword, biography } = req.body
   try {
     // Se actualiza el mombre de usuario
     if (username) {
       const user = await User.findOne({ username })
       if (user) throw new Error('el usuario ya existe')
-      const userUpdated = await User.findByIdAndUpdate(id, { username }, { new: true })
+      const userUpdated = await User.findByIdAndUpdate(userId, { username }, { new: true })
       return res.json(userUpdated)
     }
     // Se actualiza la biografia
     if (biography) {
-      const userUpdated = await User.findByIdAndUpdate(id, { biography }, { new: true })
+      const userUpdated = await User.findByIdAndUpdate(userId, { biography }, { new: true })
       return res.json(userUpdated)
     }
 
@@ -75,13 +75,13 @@ export const updateUser = async (req, res) => {
 
       const salt = await bcript.genSalt(10)
       const passwordHash = await bcript.hash(password, salt)
-      const userUpdated = await User.findByIdAndUpdate(id, { password: passwordHash }, { new: true })
+      const userUpdated = await User.findByIdAndUpdate(userId, { password: passwordHash }, { new: true })
       return res.json(userUpdated)
     }
 
     // Si no envia biografia se actualiza a null
     if (!biography) {
-      const userUpdated = await User.findByIdAndUpdate(id, { biography: '' }, { new: true })
+      const userUpdated = await User.findByIdAndUpdate(userId, { biography: '' }, { new: true })
       return res.json(userUpdated)
     }
   } catch (error) {

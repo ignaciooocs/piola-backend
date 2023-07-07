@@ -15,6 +15,6 @@ userRouter.get('/notifications/:id', getNotifications)
 
 userRouter.get('/user/:username', getUserByUsername)
 
-userRouter.put('/:id', requireToken, updateUser)
+userRouter.post('/', requireToken, updateUser)
 
 userRouter.delete('/', requireToken, deleteUser)
