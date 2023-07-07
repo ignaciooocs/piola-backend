@@ -85,7 +85,7 @@ export const updateUser = async (req, res) => {
       return res.json(userUpdated)
     }
   } catch (error) {
-    res.status(403).json({ error: error.message })
+    return res.status(403).json({ error: error.message })
   }
 }
 
