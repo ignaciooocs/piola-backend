@@ -19,32 +19,34 @@ export const searchUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   const { id } = req.params
 
-  const user = await User.findById(id).populate(userPopulate)
+  try {
+    const user = await User.findById(id).populate(userPopulate)
 
-  if (!user) {
-    res.json({ error: 'No se encontró el usuario o ya se eliminó su cuenta' })
-    return
+    if (!user) throw new Error('No se encontró el usuario o ya se eliminó su cuenta')
+
+    res.json(user)
+  } catch (error) {
+    return res.status(403).json({ error: error.message })
   }
-  user.liked.sort(() => Math.random() - 0.5)
-  res.json(user)
 }
 
 // Metodo para obtener un usuario por su nombre de usuario
 export const getUserByUsername = async (req, res) => {
   const { username } = req.params
 
-  const user = await User.findOne({ username }).populate(userPopulate)
+  try {
+    const user = await User.findOne({ username }).populate(userPopulate)
 
-  if (!user) {
-    res.json({ error: 'No se encontró el usuario o ya se eliminó su cuenta' })
-    return
+    if (!user) throw new Error('No se encontró el usuario o ya se eliminó su cuenta')
+
+    res.json(user)
+  } catch (error) {
+    return res.status(403).json({ error: error.message })
   }
-  user.liked.sort(() => Math.random() - 0.5)
-  res.json(user)
 }
 
 // Metodo para obtener todos los usuarios
-export const getUsers = async (req, res) => {
+export const getUsers = async (_, res) => {
   const users = await User.find({})
   res.json(users)
 }
